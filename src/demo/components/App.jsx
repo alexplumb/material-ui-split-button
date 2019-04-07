@@ -1,24 +1,11 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import MuiSplitButton from '../..';
 
-const styles = theme => ({
-  flex: {
-    flexGrow: 1,
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  avatar: {
-    backgroundColor: theme.palette.secondary.main,
-  },
-});
-
-@withStyles(styles)
-export default class App extends React.Component {
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <>
-      </>
-    );
-  }
-}
+export default () => (
+  <MuiSplitButton
+    variant="outlined"
+    color="secondary"
+  >
+    MuiSplitButton
+  </MuiSplitButton>
+);

@@ -37,7 +37,7 @@ module.exports = merge(common, {
         root: 'PropTypes',
       },
     },
-    "@material-ui/core",
+    '@material-ui/core',
     /@material-ui\/core\/*./,
   ],
   plugins: [

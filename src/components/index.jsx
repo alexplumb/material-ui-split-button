@@ -1,195 +1,139 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import {
-  Paper, Card, Grid, Typography, Button, Divider, ButtonBase,
-  CardActions, CardContent, Avatar, Hidden, Collapse,
+  Button, SvgIcon,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
-  root: {
-    display: 'block',
-    width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-  appBar: {
-    [theme.breakpoints.up('md')]: {
-      width: 1100,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      maxWidth: '100%',
+  buttonPositionLeft: {
+    borderLeftWidth: 0,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+    '&:hover': {
+      borderLeftWidth: 0,
     },
   },
-  cardContent: {
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit,
-    paddingTop: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
+  buttonPositionRight: {
+    borderRightWidth: 0,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    '&:hover': {
+      borderRightWidth: 0,
+    },
   },
-  avatar: {
-    backgroundColor: theme.palette.primary.main,
+  menuPositionLeft: {
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
   },
-  flex: {
-    flexGrow: 1,
+  menuPositionRight: {
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
   },
-  buttons: {
-    alignSelf: 'flex-end',
-    paddingLeft: '90px !important',
+  menuButton: {
+    width: theme.spacing.unit * 4,
+    minWidth: theme.spacing.unit * 4,
+    paddingLeft: 0,
+    paddingRight: 0,
   },
-  label: {
-    alignSelf: 'center',
-  }
+  buttonFullWidth: {
+    width: `calc(100% - ${theme.spacing.unit * 4}px)`,
+  },
 });
 
 @withStyles(styles)
-export default class Banner extends React.Component {
+export default class MuiSplitButton extends React.Component {
   static propTypes = {
-    open: PropTypes.bool.isRequired,
-    label: PropTypes.string.isRequired,
-    buttonLabel: PropTypes.string,
-    buttonOnClick: PropTypes.func,
-    buttonComponent: PropTypes.any,
-    buttonProps: PropTypes.object,
-    showDismissButton: PropTypes.bool,
-    dismissButtonLabel: PropTypes.string,
-    onClose: PropTypes.func,
-    icon: PropTypes.element,
-    iconProps: PropTypes.object,
-    appBar: PropTypes.bool,
-
-    paperProps: PropTypes.object,
-    cardProps: PropTypes.object,
+    position: PropTypes.oneOf(['left', 'right']),
+    classes: PropTypes.object.isRequired,
+    MenuButtonProps: PropTypes.object,
+    variant: PropTypes.oneOf([
+      'text',
+      'outlined',
+      'contained',
+    ]),
+    color: PropTypes.oneOf([
+      'default',
+      'inherit',
+      'primary',
+      'secondary',
+    ]),
+    className: PropTypes.string,
+    fullWidth: PropTypes.bool,
+    children: PropTypes.node.isRequired,
   }
 
   static defaultProps = {
-    open: true,
-    buttonOnClick: () => {},
-    showDismissButton: true,
-    dismissButtonLabel: 'Dismiss',
-    appBar: false,
-    buttonComponent: ButtonBase,
-    buttonProps: {},
-    iconProps: {},
-
-    paperProps: {},
-    cardProps: {},
+    position: 'right',
+    MenuButtonProps: {},
+    variant: 'text',
+    color: 'default',
+    className: '',
+    fullWidth: false,
   }
 
-  renderButtons() {
+  state = {
+    anchorEl: null,
+  };
+
+  menuButton = () => {
+    const { anchorEl } = this.state;
     const {
-      classes,
-      onClose,
-      showDismissButton,
-      dismissButtonLabel,
-      buttonOnClick,
-      buttonLabel,
-      buttonComponent,
-      buttonProps,
+      MenuButtonProps = {}, classes, position = 'right', variant, color,
     } = this.props;
 
+    const { className = '', ...restProps } = MenuButtonProps;
+
     return (
-      <>
-        <span className={classes.flex} />
-
-        <Grid item className={classes.buttons}>
-          {showDismissButton && (
-            <Button
-              variant="text"
-              onClick={onClose}
-            >
-              {dismissButtonLabel}
-            </Button>
-          )}
-
-          {!!buttonLabel && (
-            <Button
-              variant="text"
-              onClick={buttonOnClick}
-              component={buttonComponent}
-              {...buttonProps}
-            >
-              {buttonLabel}
-            </Button>
-          )}
-        </Grid>
-      </>
-    )
-  }
+      <Button
+        aria-owns={anchorEl ? 'material-ui-split-button-menu' : undefined}
+        aria-haspopup="true"
+        onClick={e => this.setState({ anchorEl: e.currentTarget })}
+        variant={variant}
+        color={color}
+        {...restProps}
+        className={classNames(
+          position === 'left' ? classes.menuPositionLeft : classes.menuPositionRight,
+          classes.menuButton,
+          className,
+        )}
+      >
+        <SvgIcon>
+          <path d="M7 10l5 5 5-5z" />
+        </SvgIcon>
+      </Button>
+    );
+  };
 
   render() {
     const {
-      open,
       classes,
-      label,
-      icon,
-      iconProps,
-      appBar,
-      showDismissButton,
-      buttonLabel,
-      paperProps,
-      cardProps,
+      className = '',
+      fullWidth = false,
+      children,
+      position = 'right',
+      MenuButtonProps,
+      ...restProps
     } = this.props;
 
-    const hasButton = Boolean(showDismissButton || buttonLabel);
-
     return (
-      <Collapse in={open}>
-        <Paper elevation={0} className={classes.root} {...paperProps}>
-          <Card elevation={0} className={appBar ? classes.appBar : ''} {...cardProps}>
-            <CardContent className={classes.cardContent}>
-              <Grid
-                container
-                wrap="nowrap"
-                spacing={16}
-                direction="row"
-                justify="flex-start"
-                alignItems="flex-start"
-              >
-                {icon && (
-                  <Grid item>
-                    <Avatar className={classes.avatar} {...iconProps}>
-                      {icon}
-                    </Avatar>
-                  </Grid>
-                )}
+      <div className={classes.root}>
+        {position === 'left' && this.menuButton()}
 
-                <Grid item className={classes.label}>
-                  <Typography variant="body2">
-                    {label}
-                  </Typography>
-                </Grid>
+        <Button
+          {...restProps}
+          className={classNames(
+            position === 'left' ? classes.buttonPositionLeft : classes.buttonPositionRight,
+            fullWidth && classes.buttonFullWidth,
+            className,
+          )}
+        >
+          {children}
+        </Button>
 
-                <Hidden smDown>
-                  {appBar && hasButton && this.renderButtons()}
-                </Hidden>
-              </Grid>
-            </CardContent>
-
-            {!appBar && hasButton && (
-              <Hidden smDown>
-                <CardActions>
-                  {this.renderButtons()}
-                </CardActions>
-              </Hidden>
-            )}
-
-            {hasButton && (
-              <Hidden mdUp>
-                <CardActions>
-                  {this.renderButtons()}
-                </CardActions>
-              </Hidden>
-            )}
-
-            <Hidden smDown>
-              <div />
-            </Hidden>
-          </Card>
-
-          <Divider />
-        </Paper>
-      </Collapse>
+        {position === 'right' && this.menuButton()}
+      </div>
     );
   }
 }
