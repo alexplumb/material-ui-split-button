@@ -42,42 +42,18 @@ const styles = theme => ({
   },
 });
 
-@withStyles(styles)
-export default class MuiSplitButton extends React.Component {
-  static propTypes = {
-    position: PropTypes.oneOf(['left', 'right']),
-    classes: PropTypes.object.isRequired,
-    MenuButtonProps: PropTypes.object,
-    variant: PropTypes.oneOf([
-      'text',
-      'outlined',
-      'contained',
-    ]),
-    color: PropTypes.oneOf([
-      'default',
-      'inherit',
-      'primary',
-      'secondary',
-    ]),
-    className: PropTypes.string,
-    fullWidth: PropTypes.bool,
-    children: PropTypes.node.isRequired,
+class MuiSplitButton extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      anchorEl: null,
+    };
+
+    this.menuButton = this.menuButton.bind(this);
   }
 
-  static defaultProps = {
-    position: 'right',
-    MenuButtonProps: {},
-    variant: 'text',
-    color: 'default',
-    className: '',
-    fullWidth: false,
-  }
-
-  state = {
-    anchorEl: null,
-  };
-
-  menuButton = () => {
+  menuButton() {
     const { anchorEl } = this.state;
     const {
       MenuButtonProps = {}, classes, position = 'right', variant, color,
@@ -104,7 +80,7 @@ export default class MuiSplitButton extends React.Component {
         </SvgIcon>
       </Button>
     );
-  };
+  }
 
   render() {
     const {
@@ -137,3 +113,34 @@ export default class MuiSplitButton extends React.Component {
     );
   }
 }
+
+MuiSplitButton.propTypes = {
+  position: PropTypes.oneOf(['left', 'right']),
+  classes: PropTypes.object.isRequired,
+  MenuButtonProps: PropTypes.object,
+  variant: PropTypes.oneOf([
+    'text',
+    'outlined',
+    'contained',
+  ]),
+  color: PropTypes.oneOf([
+    'default',
+    'inherit',
+    'primary',
+    'secondary',
+  ]),
+  className: PropTypes.string,
+  fullWidth: PropTypes.bool,
+  children: PropTypes.node.isRequired,
+};
+
+MuiSplitButton.defaultProps = {
+  position: 'right',
+  MenuButtonProps: {},
+  variant: 'text',
+  color: 'default',
+  className: '',
+  fullWidth: false,
+};
+
+export default withStyles(styles)(MuiSplitButton);

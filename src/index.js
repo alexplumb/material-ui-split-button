@@ -1,4 +1,4 @@
-import MuiSplitButton from './components';
+import MuiSplitButton from './components/index';
 
 export default MuiSplitButton;
 
