@@ -2,11 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {
-  Button, SvgIcon,
+  Button, SvgIcon, Menu,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
+  root: {
+    borderRadius: theme.spacing.unit / 2,
+  },
+  rootContained: {
+    boxShadow: theme.shadows[4],
+  },
+  button: {
+    flex: '1 0 auto',
+    boxShadow: 'none',
+  },
   buttonPositionLeft: {
     borderLeftWidth: 0,
     borderTopLeftRadius: 0,
@@ -36,9 +46,12 @@ const styles = theme => ({
     minWidth: theme.spacing.unit * 4,
     paddingLeft: 0,
     paddingRight: 0,
+    flex: 'none',
+    boxShadow: 'none',
   },
   buttonFullWidth: {
-    width: `calc(100% - ${theme.spacing.unit * 4}px)`,
+    width: '100%',
+    display: 'flex',
   },
 });
 
@@ -51,6 +64,16 @@ class MuiSplitButton extends React.Component {
     };
 
     this.menuButton = this.menuButton.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+  }
+
+  handleOpen(e) {
+    this.setState({ anchorEl: e.currentTarget });
+  }
+
+  handleClose() {
+    this.setState({ anchorEl: null });
   }
 
   menuButton() {
@@ -65,7 +88,7 @@ class MuiSplitButton extends React.Component {
       <Button
         aria-owns={anchorEl ? 'material-ui-split-button-menu' : undefined}
         aria-haspopup="true"
-        onClick={e => this.setState({ anchorEl: e.currentTarget })}
+        onClick={this.handleOpen}
         variant={variant}
         color={color}
         {...restProps}
@@ -83,25 +106,36 @@ class MuiSplitButton extends React.Component {
   }
 
   render() {
+    const { anchorEl } = this.state;
+
     const {
       classes,
       className = '',
       fullWidth = false,
       children,
       position = 'right',
+      variant,
       MenuButtonProps,
+      renderMenu,
+      MenuProps,
       ...restProps
     } = this.props;
 
     return (
-      <div className={classes.root}>
+      <div className={classNames(
+        classes.root,
+        variant === 'contained' && classes.rootContained,
+        fullWidth && classes.buttonFullWidth,
+      )}
+      >
         {position === 'left' && this.menuButton()}
 
         <Button
+          variant={variant}
           {...restProps}
           className={classNames(
             position === 'left' ? classes.buttonPositionLeft : classes.buttonPositionRight,
-            fullWidth && classes.buttonFullWidth,
+            classes.button,
             className,
           )}
         >
@@ -109,6 +143,25 @@ class MuiSplitButton extends React.Component {
         </Button>
 
         {position === 'right' && this.menuButton()}
+
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.handleClose}
+          getContentAnchorEl={null}
+          anchorOrigin={{
+            horizontal: 'left',
+            vertical: 'bottom',
+          }}
+          {...MenuProps}
+        >
+          <div>
+            {renderMenu({
+              handleClose: this.handleClose,
+            })}
+          </div>
+        </Menu>
       </div>
     );
   }
@@ -118,6 +171,7 @@ MuiSplitButton.propTypes = {
   position: PropTypes.oneOf(['left', 'right']),
   classes: PropTypes.object.isRequired,
   MenuButtonProps: PropTypes.object,
+  MenuProps: PropTypes.object,
   variant: PropTypes.oneOf([
     'text',
     'outlined',
@@ -132,11 +186,13 @@ MuiSplitButton.propTypes = {
   className: PropTypes.string,
   fullWidth: PropTypes.bool,
   children: PropTypes.node.isRequired,
+  renderMenu: PropTypes.func.isRequired,
 };
 
 MuiSplitButton.defaultProps = {
   position: 'right',
   MenuButtonProps: {},
+  MenuProps: {},
   variant: 'text',
   color: 'default',
   className: '',
