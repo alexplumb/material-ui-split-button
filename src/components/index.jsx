@@ -150,8 +150,12 @@ class MuiSplitButton extends React.Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
           getContentAnchorEl={null}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
           anchorOrigin={{
-            horizontal: 'left',
+            horizontal: 'right',
             vertical: 'bottom',
           }}
           {...MenuProps}
