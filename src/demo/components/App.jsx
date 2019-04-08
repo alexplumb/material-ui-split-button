@@ -1,5 +1,7 @@
 import React from 'react';
-import { MenuItem, Grid } from '@material-ui/core';
+import {
+  MenuItem, Grid, ListItemText, ListItemIcon, SvgIcon,
+} from '@material-ui/core';
 import MuiSplitButton from '../..';
 
 export default () => (
@@ -11,7 +13,9 @@ export default () => (
       renderMenu={({ handleClose }) => (
         <React.Fragment>
           <MenuItem onClick={handleClose}>
-            Test Menu Item
+            <ListItemText
+              primary="Click me to close the menu"
+            />
           </MenuItem>
         </React.Fragment>
       )}
@@ -47,6 +51,11 @@ export default () => (
           renderMenu={({ handleClose }) => (
             <React.Fragment>
               <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <SvgIcon>
+                    <path d="M7 10l5 5 5-5z" />
+                  </SvgIcon>
+                </ListItemIcon>
                 Test Menu Item
               </MenuItem>
             </React.Fragment>
