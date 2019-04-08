@@ -28,8 +28,6 @@ npm install material-ui-split-button --save
 
 Please refer to `src/demo` for examples.
 
-  renderMenu: PropTypes.func.isRequired,
-
 ## Options
 
 ### Any properties not listed here will be spread to the underlying Button component
