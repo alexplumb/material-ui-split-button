@@ -43,13 +43,13 @@ Please refer to `src/demo` for examples.
   <tr>
     <td> renderMenu </td>
     <td> function </td>
-    <td> (required) Render prop used for displaying the menu. The `handleClose` method is passed to this, which closes the menu</td>
+    <td> (required) Render prop used for displaying the menu. The **handleClose** method is passed to this, which closes the menu</td>
     <td> </td>
   </tr>
   <tr>
     <td> position </td>
     <td> string </td>
-    <td> The position of the menu button - can be either `left` or `right` </td>
+    <td> (optional) The position of the menu button - can be either **left** or **right** </td>
     <td> right </td>
   </tr>
   <tr>
