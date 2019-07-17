@@ -1,3 +1,8 @@
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+# DEPRECATED
+Split buttons are now natively supported by @material-ui/core - https://material-ui.com/components/buttons/#split-button
+
 # material-ui-split-button
 Split button component for the Material-UI library
 
